@@ -38,14 +38,42 @@ Mult = "*"
 Sub = "-"
 Div = "/"
 Assig = "="
+Colon = ":"
+SemiColon = ";"
 OpenBracket = "("
 CloseBracket = ")"
+OpenSquareBracket = "["
+CloseSquareBracket = "]"
+OpenAngleBracket = "<"
+CloseAngleBracket = ">"
+OpenCurlyBracket = "{"
+CloseCurlyBracket = "}"
+InlineComment = "//"
+OpenCommentBlock = "/*"
+CloseCommentBlock = "*/"
 Letter = [a-zA-Z]
 Digit = [0-9]
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
+
+/*Palabras reservadas*/
+If = "si"
+Else = "sino"
+Elif = "sino si"
+While = "mientras"
+For = "para"
+Int = "ent"
+String = "cadena"
+Float = "flotante"
+Boolean = "booleano"
+Switch = "seleccion"
+Case = "caso"
+Or = "o"
+And = "y"
+Not = "no"
+Write = "escribir" //?
 
 %%
 
