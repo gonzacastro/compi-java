@@ -31,7 +31,7 @@ La entrega 1.0.0 incluirá:
 - El archivo parser.cup con la definición de la gramática del lenguaje y la lógica de generación de la tabla de símbolos.
 - El archivo symbol-table.txt deberá contener la lista de variables y constantes con sus respectivos atributos.
 - El archivo ejecutable lyc-compiler-1.0.0.jar.
-- El archivo de pruebas test.txt que contendrá ejemplos de todos los temas comunes y especiales (selecciones, ciclos anidados, temas especiales, verificación de cotas para las constantes, chequeo de longitud de los nombres de los identificadores, comentarios, etc).
+- El archivo de pruebas test.txt que contendrá ejemplos de todos los temas comunes y especiales (selecciones, ciclos anidados, temas especiales, verificación de cotas para las constantes, chequeo de longitud de los nombres de los identificadores, comentarios, etc.).
   - Dicho archivo debe ser único (no enviar diferentes escenarios de prueba en diferentes archivos).
   - Las líneas de código que ejemplifican casos de error en tiempo de compilación deberán presentarse en el documento de manera comentadas y acompañadas de un mensaje descriptivo.
 
