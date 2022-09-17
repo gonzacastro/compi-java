@@ -53,15 +53,7 @@ OpenCommentBlock = "/*"
 CloseCommentBlock = "*/"
 Letter = [a-zA-Z]
 Digit = [0-9]
-If = "si"
 
-
-WhiteSpace = {LineTerminator} | {Identation}
-Identifier = {Letter} ({Letter}|{Digit})*
-IntegerConstant = {Digit}+
-StringConstant = "{InputCharacter}*"
-
-/*Palabras reservadas*/
 Else = "sino"
 Elif = "sino si"
 While = mientras
@@ -76,6 +68,15 @@ Or = "o"
 And = "y"
 Not = "no"
 Write = "escribir"
+If = "si"
+Init = "inicio"
+
+
+WhiteSpace = {LineTerminator} | {Identation}
+Identifier = {Letter} ({Letter}|{Digit})*
+IntegerConstant = {Digit}+
+StringConstant = \"{InputCharacter}*\"
+FloatConstant = ({IntegerConstant}?\.{IntegerConstant})|({IntegerConstant}\.{IntegerConstant}?)
 
 %%
 
@@ -83,16 +84,22 @@ Write = "escribir"
 /* keywords */
 
 <YYINITIAL> {
-  /* identifiers */
-  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
-  /* constants */
-  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
-  {StringConstant}                         { return symbol(ParserSym.STRING_CONSTANT, yytext()); }
+
+  {Init}                                     { return symbol(ParserSym.INIT); }
+
+  /* data type */
+  {Int}                                      { return symbol(ParserSym.INT); }
+  {Float}                                    { return symbol(ParserSym.FLOAT); }
+  {String}                                   { return symbol(ParserSym.STRING); }
 
   /* operators */
   {If}                                      { return symbol(ParserSym.IF); }
+  {Else}                                    { return symbol(ParserSym.ELSE); }
+  {While}                                   { return symbol(ParserSym.WHILE); }
   {Plus}                                    { return symbol(ParserSym.PLUS); }
+  {Colon}                                   { return symbol(ParserSym.COLON); }
   {SemiColon}                               { return symbol(ParserSym.SEMICOLON); }
+  {Comma}                                   { return symbol(ParserSym.COMMA); }
   {Sub}                                     { return symbol(ParserSym.SUB); }
   {Mult}                                    { return symbol(ParserSym.MULT); }
   {Div}                                     { return symbol(ParserSym.DIV); }
@@ -101,6 +108,12 @@ Write = "escribir"
   {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
   {OpenCurlyBracket}                        { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
   {CloseCurlyBracket}                       { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
+
+  /* identifiers */
+  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
+  /* constants */
+  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+  {StringConstant}                         { return symbol(ParserSym.STRING_CONSTANT, yytext()); }
 
   /* whitespace */
   {WhiteSpace}                              { /* ignore */ }

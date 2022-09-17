@@ -29,11 +29,27 @@ non terminal term;
 non terminal factor;
 
 // Start Symbol Definition
-start with sentences;
+start with program;
 
+//*     MAIN            *//
+program ::= init_block sentences {: System.out.println("Regla0: programa"); :};
+
+//*     INIT BLOCK      *//
+init_block ::= INIT OPEN_CURLY_BRACKET declarations CLOSE_CURLY_BRACKET {: System.out.println("Regla0.1: init"); :};
+declarations ::= declarations declaration {: System.out.println("Regla0: declaracions"); :};
+declarations ::= declaration {: System.out.println("Regla0: declaracions"); :};
+declaration ::= variables data_type {: System.out.println("Regla0: declaracion"); :};
+variables ::= variables COMMA IDENTIFIER {: System.out.println("Regla0: Variables"); :};
+variables ::= IDENTIFIER {: System.out.println("Regla0: Variable"); :};
+data_type ::= INT | STRING | FLOAT {: System.out.println("Regla0: tipo de dato"); :};
+//
+
+//*     SENTENCES     *//
 sentences ::= sentences sentence {: System.out.println("Regla1: Sentencias"); :};
 sentences ::= sentence {: System.out.println("Regla2: Sentencias;"); :};
-sentence ::= assignment {: System.out.println("Regla3: Sentencia"); :};
+sentence ::= assignment {: System.out.println("Regla3: Sentencia ASSIGN"); :};
+sentence ::= IF {: System.out.println("Regla3: Sentencia IF"); :};
+sentence ::= WHILE OPEN_BRACKET IDENTIFIER CLOSE_BRACKET OPEN_CURLY_BRACKET CLOSE_CURLY_BRACKET {: System.out.println("Regla3.1: Sentencia WHILE"); :};
 assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Regla4: Assignment " + id  + " = expresion"); :};
 expression ::= expression PLUS term {: System.out.println("Regla5: Expresion +"); :};
 expression ::= expression SUB term {: System.out.println("Regla6: Expresion -"); :};
@@ -43,4 +59,5 @@ term ::= term DIV factor {: System.out.println("Regla9: Termino /"); :};
 term ::= factor {: System.out.println("Regla10: Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Regla11: Factor Id: " + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Regla12: Factor Constant: " + constant ); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Regla13: Factor = (Expression)"); :};
+factor ::= FLOAT_CONSTANT:flotante {: System.out.println("Regla13: float Factor Float: " + flotante ); :};
+factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Regla14: Factor = (Expression)"); :};
