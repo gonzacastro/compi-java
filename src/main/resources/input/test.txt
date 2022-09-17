@@ -5,3 +5,6 @@ inicio {
 }
 c=1
 si
+mientras(hola) {}
+str="hola"
+d=5-4.3*.4+7.

@@ -38,6 +38,7 @@ Mult = "*"
 Sub = "-"
 Div = "/"
 Assig = "="
+Comma = ","
 Colon = ":"
 SemiColon = ";"
 OpenBracket = "("
@@ -58,9 +59,9 @@ Else = "sino"
 Elif = "sino si"
 While = mientras
 For = "para"
-Int = "ent"
-String = "cadena"
-Float = "flotante"
+Int = "Entero"
+String = "Cadena"
+Float = "Flotante"
 Boolean = "booleano"
 Switch = "seleccion"
 Case = "caso"
@@ -68,6 +69,7 @@ Or = "o"
 And = "y"
 Not = "no"
 Write = "escribir"
+Read = "leer"
 If = "si"
 Init = "inicio"
 
@@ -113,6 +115,7 @@ FloatConstant = ({IntegerConstant}?\.{IntegerConstant})|({IntegerConstant}\.{Int
   {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
   /* constants */
   {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+  {FloatConstant}                          { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
   {StringConstant}                         { return symbol(ParserSym.STRING_CONSTANT, yytext()); }
 
   /* whitespace */
