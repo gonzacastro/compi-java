@@ -3,8 +3,12 @@ inicio {
     variable1 : Int
     p1, p2, p3 : String
 }
-c=1
-si
-mientras(hola) {}
-str="hola"
-d=5-4.3*.4+7.
+mientras(a == b y c == d){
+P=T
+}
+/*asd fasdf*/
+escribir("hola")
+escribir(1)
+escribir(a)
+iguales ( a+w/b, [(d-3)*2,e,f] )
+repetir 3 [escribir(a)]

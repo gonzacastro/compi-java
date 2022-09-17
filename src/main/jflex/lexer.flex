@@ -56,15 +56,12 @@ Letter = [a-zA-Z]
 Digit = [0-9]
 
 Else = "sino"
-Elif = "sino si"
 While = mientras
 For = "para"
 Int = "Entero"
 String = "Cadena"
 Float = "Flotante"
-Boolean = "booleano"
-Switch = "seleccion"
-Case = "caso"
+Boolean = "Booleano"
 Or = "o"
 And = "y"
 Not = "no"

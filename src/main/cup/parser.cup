@@ -47,25 +47,28 @@ non terminal factor;
 // Start Symbol Definition
 start with program;
 
-//*     MAIN            *//
+//*     MAIN      *//
 program ::= init_block sentences {: System.out.println("Regla0: programa"); :};
 
 //*     INIT BLOCK      *//
 init_block ::= INIT OPEN_CURLY_BRACKET declarations CLOSE_CURLY_BRACKET {: System.out.println("Regla0.1: init"); :};
-declarations ::= declarations declaration {: System.out.println("Regla0: declaracions"); :};
-declarations ::= declaration {: System.out.println("Regla0: declaracions"); :};
-declaration ::= variables COLON data_type {: System.out.println("Regla0: declaracion"); :};
-variables ::= variables COMMA IDENTIFIER:id {: System.out.println("Regla0: Variables " + id); :};
-variables ::= IDENTIFIER:id {: System.out.println("Regla0: Variable " + id); :};
-data_type ::= INT | STRING | FLOAT {: System.out.println("Regla0: tipo de dato"); :};
-//
+declarations ::= declarations declaration {: System.out.println("Regla0.2: declaracions"); :};
+declarations ::= declaration {: System.out.println("Regla0.3: declaracions"); :};
+declaration ::= variables COLON data_type {: System.out.println("Regla0.4: declaracion"); :};
+variables ::= variables COMMA IDENTIFIER:id {: System.out.println("Regla0.5: Variables " + id); :};
+variables ::= IDENTIFIER:id {: System.out.println("Regla0.6: Variable " + id); :};
+data_type ::= INT | STRING | FLOAT {: System.out.println("Regla0.7: tipo de dato"); :};
 
 //*     SENTENCES     *//
 sentences ::= sentences sentence {: System.out.println("Regla1: Sentencias"); :};
 sentences ::= sentence {: System.out.println("Regla2: Sentencias;"); :};
 sentence ::= assignment {: System.out.println("Regla3: Sentencia ASSIGN"); :};
-sentence ::= IF {: System.out.println("Regla3: Sentencia IF"); :};
-sentence ::= WHILE OPEN_BRACKET IDENTIFIER CLOSE_BRACKET OPEN_CURLY_BRACKET CLOSE_CURLY_BRACKET {: System.out.println("Regla3.1: Sentencia WHILE"); :};
+sentence ::= if_block | if_else_block | while_block {: System.out.println("Regla3: Sentencia"); :};
+sentence ::= function {: System.out.println("Regla3: Sentencia Function"); :};
+sentences_block ::= OPEN_CURLY_BRACKET sentences CLOSE_CURLY_BRACKET {: System.out.println("Regla3: Sentencia Block"); :};
+
+
+//*     ASIGNACIONES     *//
 assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Regla4: Assignment " + id  + " = expresion"); :};
 assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("Regla4.1: Assignment " + id  + " = " + str); :};
 expression ::= expression PLUS term {: System.out.println("Regla5: Expresion +"); :};
@@ -78,3 +81,37 @@ factor ::= IDENTIFIER:id  {: System.out.println("Regla11: Factor Id: " + id); :}
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Regla12: Factor Constant: " + constant ); :};
 factor ::= FLOAT_CONSTANT:flotante {: System.out.println("Regla13: float Factor Float: " + flotante ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Regla14: Factor = (Expression)"); :};
+
+//*     BLOQUE IF      *//
+if_else_block ::= if_block else_block {: System.out.println("Regla14: If Else Block"); :};
+if_block ::= if_sentence sentences_block {: System.out.println("Regla14: If Block"); :};
+else_block ::= ELSE sentences_block {: System.out.println("Regla14: Else Block"); :};
+if_sentence ::= IF conditional {: System.out.println("Regla14: If Sentence"); :};
+
+//*     CONDICIONALES      *//
+conditional ::= OPEN_BRACKET conditions CLOSE_BRACKET {: System.out.println("Regla14: Comparacion Exitosa"); :};
+conditions ::= condition {: System.out.println("Regla15: Condiciones condicion unica"); :};
+conditions ::= condition AND condition {: System.out.println("Regla16: Condicion AND Condicion"); :};
+conditions ::= condition OR condition {: System.out.println("Regla17: Condicion OR Condicion"); :};
+condition ::= factor comparator factor {: System.out.println("Regla18: Factor Comparador Factor"); :};
+condition ::= NOT condition {: System.out.println("Regla19: Condicion NOT"); :};
+comparator ::= EQUALS | LOWER_THAN | LOWER_EQUALS_THAN | GREATER_THAN | GREATER_EQUALS_THAN {: System.out.println("Regla20: Tipo de Comparador"); :};
+
+//*     BLOQUE WHILE      *//
+while_block ::= while_sentence sentences_block {: System.out.println("Regla21: While Block"); :};
+while_sentence ::= WHILE conditional {: System.out.println("Regla22: While Sentence"); :};
+
+//*     FUNCION READ       *//
+function ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("Regla23: Read Sentence"); :};
+
+//*     FUNCION WRITE       *//
+function ::= WRITE OPEN_BRACKET write_parameter CLOSE_BRACKET {: System.out.println("Regla24: Write Sentence"); :};
+write_parameter ::= IDENTIFIER | INTEGER_CONSTANT | FLOAT_CONSTANT | STRING_CONSTANT {: System.out.println("Regla25: Write Parameter"); :};
+
+//*     FUNCION IGUALES      *//
+function ::= IGUALES OPEN_BRACKET expression COMMA OPEN_SQUARE_BRACKET list_expression CLOSE_SQUARE_BRACKET CLOSE_BRACKET {: System.out.println("Regla26: Funcion Iguales"); :};
+list_expression ::= list_expression COMMA expression {: System.out.println("Regla27: List Expression"); :};
+list_expression ::= expression {: System.out.println("Regla28: List Expression"); :};
+
+//*     FUNCION REPEAT INLINE      *//
+function ::= REPEAT INTEGER_CONSTANT OPEN_SQUARE_BRACKET sentences CLOSE_SQUARE_BRACKET {: System.out.println("Regla29: Funcion REPEAT"); :};
