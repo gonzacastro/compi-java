@@ -14,7 +14,12 @@ terminal DIV;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal INTEGER_CONSTANT;
+terminal STRING_CONSTANT;
 terminal IDENTIFIER;
+terminal OPEN_CURLY_BRACKET;
+terminal CLOSE_CURLY_BRACKET;
+terminal SEMICOLON;
+terminal IF;
 
 // Non Terminals
 non terminal sentence;
@@ -24,16 +29,18 @@ non terminal term;
 non terminal factor;
 
 // Start Symbol Definition
-start with sentence;
+start with sentences;
 
-sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
-expression ::= expression PLUS term {: System.out.println("+"); :};
-expression ::= expression SUB term {: System.out.println("-"); :};
-expression ::= term {: System.out.println("Expression = Term"); :};
-term ::= term MULT factor {: System.out.println("*"); :};
-term ::= term DIV factor {: System.out.println("/"); :};
-term ::= factor {: System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+sentences ::= sentences sentence {: System.out.println("Regla1: Sentencias"); :};
+sentences ::= sentence {: System.out.println("Regla2: Sentencias;"); :};
+sentence ::= assignment {: System.out.println("Regla3: Sentencia"); :};
+assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Regla4: Assignment " + id  + " = expresion"); :};
+expression ::= expression PLUS term {: System.out.println("Regla5: Expresion +"); :};
+expression ::= expression SUB term {: System.out.println("Regla6: Expresion -"); :};
+expression ::= term {: System.out.println("Regla7: Expression = Term"); :};
+term ::= term MULT factor {: System.out.println("Regla8: Termino *"); :};
+term ::= term DIV factor {: System.out.println("Regla9: Termino /"); :};
+term ::= factor {: System.out.println("Regla10: Term = factor"); :};
+factor ::= IDENTIFIER:id  {: System.out.println("Regla11: Factor Id: " + id); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Regla12: Factor Constant: " + constant ); :};
+factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Regla13: Factor = (Expression)"); :};

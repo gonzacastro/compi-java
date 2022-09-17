@@ -53,16 +53,18 @@ OpenCommentBlock = "/*"
 CloseCommentBlock = "*/"
 Letter = [a-zA-Z]
 Digit = [0-9]
+If = "si"
+
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
+StringConstant = "{InputCharacter}*"
 
 /*Palabras reservadas*/
-If = "si"
 Else = "sino"
 Elif = "sino si"
-While = "mientras"
+While = mientras
 For = "para"
 Int = "ent"
 String = "cadena"
@@ -73,7 +75,7 @@ Case = "caso"
 Or = "o"
 And = "y"
 Not = "no"
-Write = "escribir" //?
+Write = "escribir"
 
 %%
 
@@ -83,20 +85,25 @@ Write = "escribir" //?
 <YYINITIAL> {
   /* identifiers */
   {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
-  /* Constants */
+  /* constants */
   {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+  {StringConstant}                         { return symbol(ParserSym.STRING_CONSTANT, yytext()); }
 
   /* operators */
+  {If}                                      { return symbol(ParserSym.IF); }
   {Plus}                                    { return symbol(ParserSym.PLUS); }
+  {SemiColon}                               { return symbol(ParserSym.SEMICOLON); }
   {Sub}                                     { return symbol(ParserSym.SUB); }
   {Mult}                                    { return symbol(ParserSym.MULT); }
   {Div}                                     { return symbol(ParserSym.DIV); }
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
   {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
   {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
+  {OpenCurlyBracket}                        { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
+  {CloseCurlyBracket}                       { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
 
   /* whitespace */
-  {WhiteSpace}                   { /* ignore */ }
+  {WhiteSpace}                              { /* ignore */ }
 }
 
 
