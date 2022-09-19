@@ -4,7 +4,6 @@ import java_cup.runtime.*;
 
 class Parser;
 
-
 // Terminals
 terminal ASSIG;
 terminal PLUS;
@@ -29,6 +28,20 @@ terminal FLOAT;
 terminal STRING;
 terminal COMMA;
 terminal COLON;
+terminal LOWER_THAN;
+terminal GREATER_THAN;
+terminal LOWER_EQUALS_THAN;
+terminal GREATER_EQUALS_THAN;
+terminal EQUALS;
+terminal NOT;
+terminal AND;
+terminal OR;
+terminal WRITE;
+terminal READ;
+terminal IGUALES;
+terminal REPEAT;
+terminal OPEN_SQUARE_BRACKET;
+terminal CLOSE_SQUARE_BRACKET;
 
 // Non Terminals
 non terminal program;
@@ -43,6 +56,20 @@ non terminal assignment;
 non terminal expression;
 non terminal term;
 non terminal factor;
+non terminal conditional;
+non terminal conditions;
+non terminal condition;
+non terminal comparator;
+non terminal sentences_block;
+non terminal if_block;
+non terminal else_block;
+non terminal if_else_block;
+non terminal if_sentence;
+non terminal while_block;
+non terminal while_sentence;
+non terminal write_parameter;
+non terminal function;
+non terminal list_expression;
 
 // Start Symbol Definition
 start with program;
@@ -71,6 +98,9 @@ sentences_block ::= OPEN_CURLY_BRACKET sentences CLOSE_CURLY_BRACKET {: System.o
 //*     ASIGNACIONES     *//
 assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Regla4: Assignment " + id  + " = expresion"); :};
 assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("Regla4.1: Assignment " + id  + " = " + str); :};
+assignment ::= IDENTIFIER:id ASSIG function {: System.out.println("Regla4.2: Assignment " + id  + " = function"); :};
+
+//*     ARITMETICA     *//
 expression ::= expression PLUS term {: System.out.println("Regla5: Expresion +"); :};
 expression ::= expression SUB term {: System.out.println("Regla6: Expresion -"); :};
 expression ::= term {: System.out.println("Regla7: Expression = Term"); :};

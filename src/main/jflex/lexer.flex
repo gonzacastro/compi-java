@@ -54,7 +54,15 @@ OpenCommentBlock = "/*"
 CloseCommentBlock = "*/"
 Letter = [a-zA-Z]
 Digit = [0-9]
+LowerThan = "<"
+GreaterThan = ">"
+LowerEqualsThan = "<="
+GreaterEqualsThan = ">="
+Equals = "=="
+Iguales = "iguales"
+Repeat = "repetir"
 
+If = "si"
 Else = "sino"
 While = mientras
 For = "para"
@@ -67,15 +75,15 @@ And = "y"
 Not = "no"
 Write = "escribir"
 Read = "leer"
-If = "si"
+Repeat = "repetir"
 Init = "inicio"
-
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
 StringConstant = \"{InputCharacter}*\"
 FloatConstant = ({IntegerConstant}?\.{IntegerConstant})|({IntegerConstant}\.{IntegerConstant}?)
+BlockComment = \/\*{InputCharacter}*\*\/
 
 %%
 
@@ -85,6 +93,10 @@ FloatConstant = ({IntegerConstant}?\.{IntegerConstant})|({IntegerConstant}\.{Int
 <YYINITIAL> {
 
   {Init}                                     { return symbol(ParserSym.INIT); }
+  {Write}                                    { return symbol(ParserSym.WRITE); }
+  {Read}                                     { return symbol(ParserSym.READ); }
+  {Iguales}                                  { return symbol(ParserSym.IGUALES); }
+  {Repeat}                                   { return symbol(ParserSym.REPEAT); }
 
   /* data type */
   {Int}                                      { return symbol(ParserSym.INT); }
@@ -95,6 +107,14 @@ FloatConstant = ({IntegerConstant}?\.{IntegerConstant})|({IntegerConstant}\.{Int
   {If}                                      { return symbol(ParserSym.IF); }
   {Else}                                    { return symbol(ParserSym.ELSE); }
   {While}                                   { return symbol(ParserSym.WHILE); }
+  {And}                                     { return symbol(ParserSym.AND); }
+  {Or}                                      { return symbol(ParserSym.OR); }
+  {Not}                                     { return symbol(ParserSym.NOT); }
+  {LowerThan}                               { return symbol(ParserSym.LOWER_THAN); }
+  {GreaterThan}                             { return symbol(ParserSym.GREATER_THAN); }
+  {LowerEqualsThan}                         { return symbol(ParserSym.LOWER_EQUALS_THAN); }
+  {GreaterEqualsThan}                       { return symbol(ParserSym.GREATER_EQUALS_THAN); }
+  {Equals}                                  { return symbol(ParserSym.EQUALS ); }
   {Plus}                                    { return symbol(ParserSym.PLUS); }
   {Colon}                                   { return symbol(ParserSym.COLON); }
   {SemiColon}                               { return symbol(ParserSym.SEMICOLON); }
@@ -107,6 +127,8 @@ FloatConstant = ({IntegerConstant}?\.{IntegerConstant})|({IntegerConstant}\.{Int
   {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
   {OpenCurlyBracket}                        { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
   {CloseCurlyBracket}                       { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
+  {OpenSquareBracket}                        { return symbol(ParserSym.OPEN_SQUARE_BRACKET); }
+  {CloseSquareBracket}                       { return symbol(ParserSym.CLOSE_SQUARE_BRACKET); }
 
   /* identifiers */
   {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
@@ -115,7 +137,8 @@ FloatConstant = ({IntegerConstant}?\.{IntegerConstant})|({IntegerConstant}\.{Int
   {FloatConstant}                          { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
   {StringConstant}                         { return symbol(ParserSym.STRING_CONSTANT, yytext()); }
 
-  /* whitespace */
+  /* ignorar */
+  {BlockComment}                            { /* ignore */ }
   {WhiteSpace}                              { /* ignore */ }
 }
 

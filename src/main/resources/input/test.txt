@@ -1,7 +1,7 @@
 inicio {
-    a1, b1 : Float
-    variable1 : Int
-    p1, p2, p3 : String
+    a1, b1 : Flotante
+    variable1 : Entero
+    p1, p2, p3 : Cadena
 }
 mientras(a == b y c == d){
 P=T
