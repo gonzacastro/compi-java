@@ -1,1 +1,2 @@
+inicio{a:Entero}
 leer(base) /* base es una variable */

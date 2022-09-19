@@ -1,8 +1,9 @@
+inicio{a:Entero}
 a = 1
 b = 1
 c = 2
 
-if (no a > b)
+si (no a > b)
 {
     escribir("a no es mas grande que b")
 }

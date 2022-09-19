@@ -1,3 +1,4 @@
+inicio{a:Entero}
 a = 1
 b = 3
 mientras (a > b)

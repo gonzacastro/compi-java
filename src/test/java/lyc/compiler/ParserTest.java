@@ -18,7 +18,7 @@ public class ParserTest {
 
     @Test
     public void assignmentWithExpression() throws Exception {
-        compilationSuccessful("c=d*(e-21)/4");
+        compilationSuccessful("inicio{a:Entero}c=d*(e-21)/4");
     }
 
     @Test
@@ -94,6 +94,5 @@ public class ParserTest {
         assertThat(resource).isNotNull();
         return IOUtils.toString(resource, StandardCharsets.UTF_8);
     }
-
 
 }

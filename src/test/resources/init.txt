@@ -3,3 +3,4 @@ inicio {
     variable1 : Entero
     p1, p2, p3 : Cadena
 }
+a = 1

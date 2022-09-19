@@ -1,3 +1,4 @@
+inicio{a:Entero}
 si (a > b)
 {
     escribir("a es mas grande que b")

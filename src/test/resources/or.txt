@@ -1,8 +1,8 @@
+inicio{a:Entero}
 a = 1
 b = 1
 c = 2
-
-if (a > b o c > b)
+si (a > b o c > b)
 {
     escribir("a es mas grande que b o c es mas grande que b")
 }

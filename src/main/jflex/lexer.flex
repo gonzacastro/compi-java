@@ -3,6 +3,7 @@ package lyc.compiler;
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
 import lyc.compiler.model.*;
+import lyc.compiler.files.*;
 import static lyc.compiler.constants.Constants.*;
 
 %%
@@ -20,6 +21,7 @@ import static lyc.compiler.constants.Constants.*;
 
 
 %{
+  SymbolTableGenerator tablaDeSimbolos = SymbolTableGenerator.getInstance();
   int IDENTIFIER_RANGE = (int) 20;
   int STRING_RANGE = (int) 40;
 
@@ -28,6 +30,10 @@ import static lyc.compiler.constants.Constants.*;
   }
   private Symbol symbol(int type, Object value) {
     return new Symbol(type, yyline, yycolumn, value);
+  }
+
+  private void agregarSimbolo(Simbolo simbolo) {
+    tablaDeSimbolos.add(simbolo);
   }
 %}
 
@@ -139,9 +145,10 @@ BlockComment = \/\*{InputCharacter}*\*\/
                                             String id = new String(yytext());
                                             int length = id.length();
 
-                                            if (length <= IDENTIFIER_RANGE )
-                                              return symbol(ParserSym.IDENTIFIER, yytext());                                          
-                                            else
+                                            if (length <= IDENTIFIER_RANGE ) {
+                                              agregarSimbolo(new Simbolo(yytext(), null, null, 0));
+                                              return symbol(ParserSym.IDENTIFIER, yytext());
+                                            } else
                                             {
                                               System.err.println("El identificador [" + id + "] no esta dentro del limite permitido.");                                    
                                               System.in.read();
@@ -154,9 +161,11 @@ BlockComment = \/\*{InputCharacter}*\*\/
                                           {                             
                                             Integer constInt = Integer.parseInt(yytext());
 
-                                            if (constInt >= Short.MIN_VALUE && constInt <= Short.MAX_VALUE)
+                                            if (constInt >= Short.MIN_VALUE && constInt <= Short.MAX_VALUE) {
+                                              Simbolo simbolo = new Simbolo("_" + String.valueOf(constInt), "Entero", String.valueOf(constInt), 0);
+                                              agregarSimbolo(simbolo);
                                               return symbol(ParserSym.INTEGER_CONSTANT, yytext());                                         
-                                            else
+                                            } else
                                             {
                                               System.err.println("El entero [" + yytext() + "] no esta dentro del limite permitido.");
                                               System.in.read();
@@ -167,9 +176,11 @@ BlockComment = \/\*{InputCharacter}*\*\/
 {FloatConstant}            
                                           {
                                             Double constFloat = Double.parseDouble(yytext());
-                                            if (constFloat >= Float.MIN_VALUE && constFloat <= Float.MAX_VALUE)
+                                            if (constFloat >= Float.MIN_VALUE && constFloat <= Float.MAX_VALUE) {
+                                              Simbolo simbolo = new Simbolo("_" + String.valueOf(constFloat), "Flotante", String.valueOf(constFloat), 0);
+                                              agregarSimbolo(simbolo);
                                               return symbol(ParserSym.FLOAT_CONSTANT, yytext());
-                                            else
+                                            } else
                                             {
                                               System.err.println("El flotante [" + yytext() + "] no esta dentro del limite permitido.");
                                               System.in.read();
@@ -181,9 +192,11 @@ BlockComment = \/\*{InputCharacter}*\*\/
                                           { 
                                             String constString = new String(yytext());
                                             
-                                            if (constString.length()-2 <= STRING_RANGE)
-                                              return symbol(ParserSym.STRING_CONSTANT, yytext()); 
-                                            else
+                                            if (constString.length()-2 <= STRING_RANGE) {
+                                              Simbolo simbolo = new Simbolo("_" + constString, "Cadena", constString, constString.length());
+                                              agregarSimbolo(simbolo);
+                                              return symbol(ParserSym.STRING_CONSTANT, yytext());
+                                            } else
                                             {
                                               System.err.println("La cadena [" + yytext() + "] no esta dentro del limite permitido.");
                                               System.in.read();
