@@ -8,7 +8,9 @@ P=T
 }
 /*asd fasdf*/
 escribir("hola")
-escribir(1)
 escribir(a)
 iguales ( a+w/b, [(d-3)*2,e,f] )
 repetir 3 [escribir(a)]
+ent = 1111
+flt = 9.09
+str = "A"
