@@ -74,6 +74,56 @@ public class LexerTest {
   }
 
   @Test
+  public void initToken() throws Exception{
+    scan("inicio");
+    assertThat(nextToken()).isEqualTo(ParserSym.INIT);
+  }
+
+  public void whileToken() throws Exception{
+    scan("mientras");
+    assertThat(nextToken()).isEqualTo(ParserSym.WHILE);
+  }
+  public void ifToken() throws Exception{
+    scan("si");
+    assertThat(nextToken()).isEqualTo(ParserSym.IF);
+  }
+
+  public void readToken() throws Exception{
+    scan("leer");
+    assertThat(nextToken()).isEqualTo(ParserSym.READ);
+  }
+
+  public void writeToken() throws Exception{
+    scan("escribir");
+    assertThat(nextToken()).isEqualTo(ParserSym.WRITE);
+  }
+
+  public void forToken() throws Exception{
+    scan("para");
+    assertThat(nextToken()).isEqualTo(ParserSym.FOR);
+  }
+
+  public void elseToken() throws Exception{
+    scan("sino");
+    assertThat(nextToken()).isEqualTo(ParserSym.ELSE);
+  }
+
+  public void condition() throws Exception{
+    scan("si(a>bya<c");
+    assertThat(nextToken()).isEqualTo(ParserSym.IF);
+    assertThat(nextToken()).isEqualTo(ParserSym.OPEN_BRACKET);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.GREATER_THAN);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.AND);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.LOWER_THAN);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.CLOSE_BRACKET);
+
+  }
+
+  @Test
   public void assignmentWithExpressions() throws Exception {
     scan("c=d*(e-21)/4");
     assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
