@@ -1,10 +1,7 @@
 package lyc.compiler;
 
 import lyc.compiler.factories.LexerFactory;
-import lyc.compiler.model.CompilerException;
-import lyc.compiler.model.InvalidIntegerException;
-import lyc.compiler.model.InvalidLengthException;
-import lyc.compiler.model.UnknownCharacterException;
+import lyc.compiler.model.*;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +14,6 @@ import static com.google.common.truth.Truth.assertThat;
 import static lyc.compiler.constants.Constants.MAX_LENGTH;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Disabled
 public class LexerTest {
 
   private Lexer lexer;
@@ -61,6 +57,21 @@ public class LexerTest {
     });
   }
 
+  @Test
+  public void invalidPositiveFloatConstantValue() {
+    assertThrows(InvalidFloatException.class, () -> {
+      scan("%d".formatted(Float.MAX_VALUE + 1.0));
+      nextToken();
+    });
+  }
+
+  @Test
+  public void invalidNegativeFloatConstantValue() {
+    assertThrows(InvalidFloatException.class, () -> {
+      scan("%d".formatted(Float.MIN_VALUE - 1.0));
+      nextToken();
+    });
+  }
 
   @Test
   public void assignmentWithExpressions() throws Exception {
