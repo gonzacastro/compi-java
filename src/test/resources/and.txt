@@ -5,5 +5,5 @@ c = 2
 
 si (a > b y c > b)
 {
-    escribir("a es mas grande que b y c es mas grande que b")
+    escribir("a es mas grande que b y c es mas grand")
 }

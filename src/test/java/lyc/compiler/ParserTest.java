@@ -1,10 +1,10 @@
 package lyc.compiler;
 
-import java_cup.runtime.Symbol;
-import lyc.compiler.factories.ParserFactory;
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+ import java_cup.runtime.Symbol;
+ import lyc.compiler.factories.ParserFactory;
+ import org.apache.commons.io.IOUtils;
+ import org.junit.jupiter.api.Disabled;
+ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +19,21 @@ public class ParserTest {
     @Test
     public void assignmentWithExpression() throws Exception {
         compilationSuccessful("inicio{a:Entero}c=d*(e-21)/4");
+    }
+
+    @Test
+    public void iguales() throws Exception {
+        compilationSuccessful("inicio{a:Entero} iguales ( a+w/b, [(d-3)*2,e,f] )");
+    }
+
+    @Test
+    public void repetir() throws Exception {
+        compilationSuccessful("inicio{a:Entero} repetir 3 [escribir(a)]");
+    }
+
+    @Test
+    public void comments() throws Exception {
+        compilationSuccessful("inicio{a:Entero} c=d /* TEST a=b */");
     }
 
     @Test
