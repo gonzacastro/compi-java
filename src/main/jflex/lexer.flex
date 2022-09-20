@@ -116,6 +116,7 @@ BlockComment = \/\*{InputCharacter}*\*\/
   {If}                                      { return symbol(ParserSym.IF); }
   {Else}                                    { return symbol(ParserSym.ELSE); }
   {While}                                   { return symbol(ParserSym.WHILE); }
+  {For}                                     { return symbol(ParserSym.FOR); }
   {And}                                     { return symbol(ParserSym.AND); }
   {Or}                                      { return symbol(ParserSym.OR); }
   {Not}                                     { return symbol(ParserSym.NOT); }
@@ -161,30 +162,30 @@ BlockComment = \/\*{InputCharacter}*\*\/
                                           {                             
                                             Integer constInt = Integer.parseInt(yytext());
 
-                                            if (constInt >= Short.MIN_VALUE && constInt <= Short.MAX_VALUE) {
+                                            if (constInt > -99999999 && constInt < 99999999) {
                                               Simbolo simbolo = new Simbolo("_" + String.valueOf(constInt), "Entero", String.valueOf(constInt), 0);
                                               agregarSimbolo(simbolo);
                                               return symbol(ParserSym.INTEGER_CONSTANT, yytext());                                         
                                             } else
                                             {
                                               System.err.println("El entero [" + yytext() + "] no esta dentro del limite permitido.");
-                                              System.in.read();
-                                              throw new Error("El entero [" + yytext() + "] no esta dentro del limite permitido."); 
+                                             // System.in.read();
+                                              throw new InvalidIntegerException("El entero [" + yytext() + "] no esta dentro del limite permitido.");
                                             }
                                           }
 
 {FloatConstant}            
                                           {
                                             Double constFloat = Double.parseDouble(yytext());
-                                            if (constFloat >= Float.MIN_VALUE && constFloat <= Float.MAX_VALUE) {
+                                            if (constFloat > 0.000000000001 && constFloat < 10000000000.1) {
                                               Simbolo simbolo = new Simbolo("_" + String.valueOf(constFloat), "Flotante", String.valueOf(constFloat), 0);
                                               agregarSimbolo(simbolo);
                                               return symbol(ParserSym.FLOAT_CONSTANT, yytext());
                                             } else
                                             {
                                               System.err.println("El flotante [" + yytext() + "] no esta dentro del limite permitido.");
-                                              System.in.read();
-                                              throw new Error("El flotante [" + yytext() + "] no esta dentro del limite permitido.");
+                                             // System.in.read();
+                                              throw new InvalidFloatException("El flotante [" + yytext() + "] no esta dentro del limite permitido.");
                                             }
                                           }
 

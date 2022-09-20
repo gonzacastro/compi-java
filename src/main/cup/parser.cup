@@ -42,6 +42,7 @@ terminal IGUALES;
 terminal REPEAT;
 terminal OPEN_SQUARE_BRACKET;
 terminal CLOSE_SQUARE_BRACKET;
+terminal FOR;
 
 // Non Terminals
 non terminal program;
