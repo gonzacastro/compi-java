@@ -13,17 +13,16 @@ import java.nio.charset.StandardCharsets;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Disabled
 public class ParserTest {
 
     @Test
     public void assignmentWithExpression() throws Exception {
-        compilationSuccessful("inicio{a:Entero}c=d*(e-21)/4");
+        compilationSuccessful("inicio{a:Entero}c=d*(e - 21)/4");
     }
 
     @Test
     public void iguales() throws Exception {
-        compilationSuccessful("inicio{a:Entero} iguales ( a+w/b, [(d-3)*2,e,f] )");
+        compilationSuccessful("inicio{a:Entero} iguales ( a + w/b, [(d - 3)*2,e,f] )");
     }
 
     @Test

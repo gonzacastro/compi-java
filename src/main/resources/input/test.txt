@@ -10,7 +10,7 @@ P=T
 /* ajd fasdf */
 escribir("hola")
 escribir(a)
-iguales ( a+w/b, [(d-3)*2,e,f] )
+iguales ( a + w/b, [(d - 3)*2,e,f] )
 repetir 3 [escribir(a)]
 ent = 1111
 flt = 9.09
