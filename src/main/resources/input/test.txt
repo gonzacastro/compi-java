@@ -2,6 +2,7 @@ inicio {
     a1, b1 : Flotante
     variable1 : Entero
     p1, p2, p3 : Cadena
+
 }
 mientras(a == b y c == d){
 P=T
@@ -14,4 +15,28 @@ repetir 3 [escribir(a)]
 ent = 1111
 flt = 9.09
 str = "A"
+
+mientras(a == b y c==d){
+	z = 100
+	si(c == d) {
+		mientras(a == b){
+        	si(a == z) {
+        		p = u
+        	}
+        	sino {
+        		escribir("TEST SINO")
+        	}
+        }
+        si(a == b) {
+        escribir("a ES IGUAL A b")
+            a = z
+        }
+        sino {
+            escribir("a NO ES IGUAL A b")
+        }
+
+	}sino{
+        a = 1
+	}
+}
 
