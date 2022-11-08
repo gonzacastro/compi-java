@@ -14,17 +14,18 @@ public class TercetoCodigoIntermedio {
 
     public TercetoCodigoIntermedio() {
         this.tercetos = new ArrayList<Terceto>();
-        this.punteros = new HashMap<TipoDePuntero,Terceto>();
-        this.pila = new Stack<Terceto>();
+        this.punteros = new HashMap<TipoDePuntero,Integer>();
+        this.pila = new Stack<Integer>();
     }
 
-    public Terceto insertarTerceto(TipoDePuntero puntero, String operando1, Terceto... operandos) {
-        Terceto operando2 = operandos.length > 0 ? operandos[0] : null;
-        Terceto operando3 = operandos.length > 1 ? operandos[1] : null;
+    public Integer insertarTerceto(TipoDePuntero puntero, String operando1, Integer... operandos) {
+        Integer operando2 = operandos.length > 0 ? operandos[0] : null;
+        Integer operando3 = operandos.length > 1 ? operandos[1] : null;
 
         Terceto terceto = new Terceto(operando1, operando2, operando3);
 
         tercetos.add(terceto);
+        Integer idTerceto = tercetos.size() - 1;
 
         if (puntero != null) {
             punteros.put(puntero, terceto);
@@ -32,7 +33,7 @@ public class TercetoCodigoIntermedio {
 
         System.out.println(terceto.toString());
 
-        return terceto;
+        return idTerceto;
     }
 
     public void actualizarPuntero(TipoDePuntero punteroNuevo, TipoDePuntero punteroAnterior) {
@@ -43,7 +44,7 @@ public class TercetoCodigoIntermedio {
         pila.push(terceto);
     }
 
-    public Terceto desapilarTerceto() {
+    public Integer desapilarTerceto() {
         return pila.pop();
     }
 
@@ -51,8 +52,12 @@ public class TercetoCodigoIntermedio {
         return tercetos;
     }
 
-    public Terceto obtenerTercetoDePuntero(TipoDePuntero puntero) {
+    public Integer obtenerTercetoDePuntero(TipoDePuntero puntero) {
         return punteros.get(puntero);
+    }
+
+    public Integer obtenerPosicionTerceto(Terceto terceto) {
+        return tercetos.indexOf(terceto);
     }
 
     public void mostrarTercetos() {

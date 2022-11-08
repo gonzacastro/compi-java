@@ -6,19 +6,19 @@ import java.util.ArrayList;
 public class Terceto {
 
     public String operando1;
-    public Terceto operando2 = null;
-    public Terceto operando3 = null;
+    public Integer operando2 = null;
+    public Integer operando3 = null;
 
     public Terceto(String operando1) {
         this.operando1 = operando1;
     }
 
-    public Terceto(String operando1, Terceto operando2) {
+    public Terceto(String operando1, Integer operando2) {
         this.operando1 = operando1;
         this.operando2 = operando2;
     }
 
-    public Terceto(String operando1, Terceto operando2, Terceto operando3) {
+    public Terceto(String operando1, Integer operando2, Integer operando3) {
         this.operando1 = operando1;
         this.operando2 = operando2;
         this.operando3 = operando3;

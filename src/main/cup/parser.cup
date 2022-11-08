@@ -110,21 +110,87 @@ assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("Re
 assignment ::= IDENTIFIER:id ASSIG function {: System.out.println("Regla4.2: Assignment " + id  + " = function"); :};
 
 //*     ARITMETICA     *//
-expression ::= expression PLUS term {: codigoIntermedio.insertarTerceto(TipoDePuntero.pTermino, "+", codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino)); System.out.println("Regla5: Expresion +"); :};
-expression ::= expression SUB term {: codigoIntermedio.insertarTerceto(TipoDePuntero.pTermino, "-", codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino)); System.out.println("Regla6: Expresion -"); :};
-expression ::= term {: codigoIntermedio.actualizarPuntero(TipoDePuntero.pExpresion, TipoDePuntero.pTermino); System.out.println("Regla7: Expression = Term"); :};
-term ::= term MULT factor {: codigoIntermedio.insertarTerceto(TipoDePuntero.pTermino, "*", codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFactor)); System.out.println("Regla8: Termino *"); :};
-term ::= term DIV factor {: codigoIntermedio.insertarTerceto(TipoDePuntero.pTermino, "/", codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFactor)); System.out.println("Regla9: Termino /"); :};
-term ::= factor {: codigoIntermedio.actualizarPuntero(TipoDePuntero.pTermino, TipoDePuntero.pFactor); System.out.println("Regla10: Term = factor"); :};
-factor ::= IDENTIFIER:id  {: codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, id.toString()); System.out.println("Regla11: Factor Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, constant.toString()); System.out.println("Regla12: Factor Constant: " + constant ); :};
-factor ::= FLOAT_CONSTANT:flotante {: codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, flotante.toString()); System.out.println("Regla13: float Factor Float: " + flotante ); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Regla14: Factor = (Expression)"); :};
+expression ::= expression {:
+    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
+    :} PLUS term {:
+    codigoIntermedio.insertarTerceto(
+        TipoDePuntero.pExpresion,
+        "+",
+        codigoIntermedio.desapilarTerceto(),
+        codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino));
+        System.out.println("Regla5: Expresion +"
+    );
+:};
+
+expression ::= expression {:
+  codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
+ :} SUB term {:
+    codigoIntermedio.insertarTerceto(
+        TipoDePuntero.pExpresion,
+        "-",
+        codigoIntermedio.desapilarTerceto(),
+        codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino)
+    );
+    System.out.println("Regla6: Expresion -");
+:};
+
+expression ::= term {:
+    codigoIntermedio.actualizarPuntero(TipoDePuntero.pExpresion, TipoDePuntero.pTermino);
+    System.out.println("Regla7: Expression = Term");
+:};
+
+term ::= term {:
+    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino));
+    :} MULT factor {:
+    codigoIntermedio.insertarTerceto(
+        TipoDePuntero.pTermino,
+        "*",
+        codigoIntermedio.desapilarTerceto(),
+        codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFactor)
+    );
+    System.out.println("Regla8: Termino *");
+:};
+
+term ::= term {:
+    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino));
+    :} DIV factor {:
+    codigoIntermedio.insertarTerceto(
+        TipoDePuntero.pTermino,
+        "/",
+        codigoIntermedio.desapilarTerceto(),
+        codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFactor)
+    );
+    System.out.println("Regla9: Termino /");
+:};
+
+term ::= factor {:
+    codigoIntermedio.actualizarPuntero(TipoDePuntero.pTermino, TipoDePuntero.pFactor);
+    System.out.println("Regla10: Term = factor");
+:};
+
+factor ::= IDENTIFIER:id  {:
+    codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, id.toString());
+    System.out.println("Regla11: Factor Id: " + id);
+:};
+
+factor ::= INTEGER_CONSTANT:constant {:
+    codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, constant.toString());
+    System.out.println("Regla12: Factor Constant: " + constant );
+:};
+
+factor ::= FLOAT_CONSTANT:flotante {:
+    codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, flotante.toString());
+    System.out.println("Regla13: float Factor Float: " + flotante );
+:};
+
+factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
+    codigoIntermedio.actualizarPuntero(TipoDePuntero.pFactor, TipoDePuntero.pExpresion);
+    System.out.println("Regla14: Factor = (Expression)");
+:};
 
 //*     BLOQUE IF      *//
-if_else_block ::= if_block else_block {: System.out.println("Regla14: If Else Block"); :};
 if_block ::= if_sentence sentences_block {: System.out.println("Regla14: If Block"); :};
-else_block ::= ELSE sentences_block {: System.out.println("Regla14: Else Block"); :};
+if_else_block ::= if_sentence sentences_block ELSE sentences_block {: System.out.println("Regla14: If Else Block"); :};
 if_sentence ::= IF conditional {: System.out.println("Regla14: If Sentence"); :};
 
 //*     CONDICIONALES      *//
