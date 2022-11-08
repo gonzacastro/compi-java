@@ -9,8 +9,9 @@ import java.util.Stack;
 public class TercetoCodigoIntermedio {
 
     private ArrayList<Terceto> tercetos;
-    private HashMap<TipoDePuntero,Terceto> punteros;
-    private Stack<Terceto> pila;
+    private HashMap<TipoDePuntero,Integer> punteros;
+    private Stack<Integer> pila;
+    public String ultimoComparadorLeido = "";
 
     public TercetoCodigoIntermedio() {
         this.tercetos = new ArrayList<Terceto>();

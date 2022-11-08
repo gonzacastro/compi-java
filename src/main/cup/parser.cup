@@ -223,10 +223,51 @@ conditional ::= OPEN_BRACKET conditions CLOSE_BRACKET {: System.out.println("Reg
 conditions ::= condition {: System.out.println("Regla15: Condiciones condicion unica"); :};
 
 conditions ::= condition AND condition {: System.out.println("Regla16: Condicion AND Condicion"); :};
-conditions ::= condition OR condition {: System.out.println("Regla17: Condicion OR Condicion"); :};
-condition ::= factor comparator factor {: System.out.println("Regla18: Factor Comparador Factor"); :};
+
+conditions ::= condition {:
+    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pCondicion));
+:} OR condition {:
+:};
+
+condition ::= factor {:
+    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFactor));
+:} comparator factor {:
+    codigoIntermedio.insertarTerceto(
+        null,
+        "CMP",
+        codigoIntermedio.desapilarTerceto(),
+        codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFactor)
+    );
+    codigoIntermedio.insertarTerceto(TipoDePuntero.pCondicion, codigoIntermedio.ultimoComparadorLeido, null, null);
+    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pCondicion));
+:};
+
 condition ::= NOT condition {: System.out.println("Regla19: Condicion NOT"); :};
-comparator ::= EQUALS | LOWER_THAN | LOWER_EQUALS_THAN | GREATER_THAN | GREATER_EQUALS_THAN {: System.out.println("Regla20: Tipo de Comparador"); :};
+
+comparator ::= EQUALS {:
+    codigoIntermedio.ultimoComparadorLeido = "BNE";
+    System.out.println("Regla20: Tipo de Comparador");
+:};
+
+comparator ::= LOWER_THAN {:
+    codigoIntermedio.ultimoComparadorLeido = "BGE";
+    System.out.println("Regla20: Tipo de Comparador");
+:};
+
+comparator ::= LOWER_EQUALS_THAN {:
+    codigoIntermedio.ultimoComparadorLeido = "BGT";
+    System.out.println("Regla20: Tipo de Comparador");
+:};
+
+comparator ::= GREATER_THAN {:
+    codigoIntermedio.ultimoComparadorLeido = "BLE";
+    System.out.println("Regla20: Tipo de Comparador");
+:};
+
+comparator ::= GREATER_EQUALS_THAN {:
+    codigoIntermedio.ultimoComparadorLeido = "BLT";
+    System.out.println("Regla20: Tipo de Comparador");
+:};
 
 //*     BLOQUE WHILE      *//
 while_block ::= while_sentence sentences_block {: System.out.println("Regla21: While Block"); :};
