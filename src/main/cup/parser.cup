@@ -86,28 +86,52 @@ start with program;
 //*     MAIN      *//
 program ::= init_block sentences {: System.out.println("Regla0: programa"); codigoIntermedio.mostrarTercetos(); :};
 
+
 //*     INIT BLOCK      *//
 init_block ::= INIT OPEN_CURLY_BRACKET declarations CLOSE_CURLY_BRACKET {: System.out.println("Regla0.1: init"); :};
+
 declarations ::= declarations declaration {: System.out.println("Regla0.2: declaracions"); :};
+
 declarations ::= declaration {: System.out.println("Regla0.3: declaracions"); :};
+
 declaration ::= variables COLON data_type {: System.out.println("Regla0.4: declaracion"); :};
+
 variables ::= variables COMMA IDENTIFIER:id {: System.out.println("Regla0.5: Variables " + id); :};
+
 variables ::= IDENTIFIER:id {: System.out.println("Regla0.6: Variable " + id); :};
+
 data_type ::= INT | STRING | FLOAT {: System.out.println("Regla0.7: tipo de dato"); :};
+
 
 //*     SENTENCES     *//
 sentences ::= sentences sentence {: System.out.println("Regla1: Sentencias"); :};
+
 sentences ::= sentence {: System.out.println("Regla2: Sentencias;"); :};
+
 sentence ::= assignment {: System.out.println("Regla3: Sentencia ASSIGN"); :};
+
 sentence ::= if_block | if_else_block | while_block {: System.out.println("Regla3: Sentencia"); :};
+
 sentence ::= function {: System.out.println("Regla3: Sentencia Function"); :};
+
 sentences_block ::= OPEN_CURLY_BRACKET sentences CLOSE_CURLY_BRACKET {: System.out.println("Regla3: Sentencia Block"); :};
 
 
 //*     ASIGNACIONES     *//
-assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Regla4: Assignment " + id  + " = expresion"); :};
-assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("Regla4.1: Assignment " + id  + " = " + str); :};
-assignment ::= IDENTIFIER:id ASSIG function {: System.out.println("Regla4.2: Assignment " + id  + " = function"); :};
+assignment ::= IDENTIFIER:id ASSIG expression {:
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, id.toString()), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
+    System.out.println("Regla4: Assignment " + id  + " = expresion");
+:};
+
+assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {:
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, id.toString()), codigoIntermedio.insertarTerceto(null, str.toString()));
+    System.out.println("Regla4.1: Assignment " + id  + " = " + str);
+:};
+
+assignment ::= IDENTIFIER:id ASSIG function {:
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, id.toString()), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFuncion));
+    System.out.println("Regla4.2: Assignment " + id  + " = function");
+:};
 
 //*     ARITMETICA     *//
 expression ::= expression {:
@@ -195,7 +219,9 @@ if_sentence ::= IF conditional {: System.out.println("Regla14: If Sentence"); :}
 
 //*     CONDICIONALES      *//
 conditional ::= OPEN_BRACKET conditions CLOSE_BRACKET {: System.out.println("Regla14: Comparacion Exitosa"); :};
+
 conditions ::= condition {: System.out.println("Regla15: Condiciones condicion unica"); :};
+
 conditions ::= condition AND condition {: System.out.println("Regla16: Condicion AND Condicion"); :};
 conditions ::= condition OR condition {: System.out.println("Regla17: Condicion OR Condicion"); :};
 condition ::= factor comparator factor {: System.out.println("Regla18: Factor Comparador Factor"); :};

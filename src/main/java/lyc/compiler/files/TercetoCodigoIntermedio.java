@@ -28,7 +28,7 @@ public class TercetoCodigoIntermedio {
         Integer idTerceto = tercetos.size() - 1;
 
         if (puntero != null) {
-            punteros.put(puntero, terceto);
+            punteros.put(puntero, idTerceto);
         }
 
         System.out.println(terceto.toString());
@@ -40,8 +40,8 @@ public class TercetoCodigoIntermedio {
         punteros.put(punteroNuevo, punteros.remove(punteroAnterior));
     }
 
-    public void apilarTerceto(Terceto terceto) {
-        pila.push(terceto);
+    public void apilarTerceto(Integer idTerceto) {
+        pila.push(idTerceto);
     }
 
     public Integer desapilarTerceto() {
