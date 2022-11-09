@@ -4,39 +4,18 @@ inicio {
     p1, p2, p3 : Cadena
 
 }
-mientras(a == b y c == d){
-P=T
-}
-/* ajd fasdf */
-escribir("hola")
-escribir(a)
-iguales ( a + w/b, [(d - 3)*2,e,f] )
-repetir 3 [escribir(a)]
-ent = 1111
-flt = 9.09
-str = "A"
 
-mientras(a == b y c==d){
-	z = 100
-	si(c == d) {
-		mientras(a == b){
-        	si(a == z) {
-        		p = u
-        	}
-        	sino {
-        		escribir("TEST SINO")
-        	}
-        }
-        si(a == b) {
-        escribir("a ES IGUAL A b")
-            a = z
-        }
-        sino {
-            escribir("a NO ES IGUAL A b")
-        }
-
-	}sino{
-        a = 1
-	}
+si(no a == u) {
+    a = "notttt"
 }
 
+si(a == u o a == 1) {
+    p = u
+} sino {
+    j=1
+    escribir("TEST SINO")
+    si(c == 9 y f == 6) {
+        a = b
+    }
+}
+a=3

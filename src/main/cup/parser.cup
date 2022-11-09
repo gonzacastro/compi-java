@@ -3,13 +3,15 @@ package lyc.compiler;
 import java_cup.runtime.*;
 import lyc.compiler.*;
 import lyc.compiler.constants.TipoDePuntero;
+import lyc.compiler.constants.Comparadores;
 import lyc.compiler.files.*;
 import lyc.compiler.model.*;
 
 class Parser;
 
 parser code{:
-	private TercetoCodigoIntermedio  codigoIntermedio = new TercetoCodigoIntermedio();
+	private TercetoCodigoIntermedio codigoIntermedio = new TercetoCodigoIntermedio();
+	private Comparadores comparadores = new Comparadores();
 :}
 
 // Terminals
@@ -213,20 +215,49 @@ factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
 :};
 
 //*     BLOQUE IF      *//
-if_block ::= if_sentence sentences_block {: System.out.println("Regla14: If Block"); :};
-if_else_block ::= if_sentence sentences_block ELSE sentences_block {: System.out.println("Regla14: If Else Block"); :};
+if_block ::= if_sentence sentences_block {:
+    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos());
+:};
+
+if_else_block ::= if_sentence sentences_block {:
+    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos()+1);
+    codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, "BI"));
+:} ELSE sentences_block {:
+    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos());
+    System.out.println("Regla14: If Else Block");
+:};
+
 if_sentence ::= IF conditional {: System.out.println("Regla14: If Sentence"); :};
 
 //*     CONDICIONALES      *//
 conditional ::= OPEN_BRACKET conditions CLOSE_BRACKET {: System.out.println("Regla14: Comparacion Exitosa"); :};
 
-conditions ::= condition {: System.out.println("Regla15: Condiciones condicion unica"); :};
-
-conditions ::= condition AND condition {: System.out.println("Regla16: Condicion AND Condicion"); :};
+conditions ::= condition {:
+    codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido));
+    System.out.println("Regla15: Condiciones condicion unica");
+:};
 
 conditions ::= condition {:
-    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pCondicion));
+    codigoIntermedio.apilarTerceto(
+        codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null)
+    );
+:} AND condition {:
+    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos()+1);
+    codigoIntermedio.apilarTerceto(
+        codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null)
+    );
+    System.out.println("Regla16: Condicion AND Condicion");
+:};
+
+conditions ::= condition {:
+    codigoIntermedio.ultimoComparadorLeido = comparadores.obtenerOpuesto(codigoIntermedio.ultimoComparadorLeido);
+    codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido));
 :} OR condition {:
+    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos()+1);
+    codigoIntermedio.apilarTerceto(
+        codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null)
+    );
+
 :};
 
 condition ::= factor {:
@@ -238,11 +269,12 @@ condition ::= factor {:
         codigoIntermedio.desapilarTerceto(),
         codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFactor)
     );
-    codigoIntermedio.insertarTerceto(TipoDePuntero.pCondicion, codigoIntermedio.ultimoComparadorLeido, null, null);
-    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pCondicion));
 :};
 
-condition ::= NOT condition {: System.out.println("Regla19: Condicion NOT"); :};
+condition ::= NOT condition {:
+    codigoIntermedio.ultimoComparadorLeido = comparadores.obtenerOpuesto(codigoIntermedio.ultimoComparadorLeido);
+    System.out.println("Regla19: Condicion NOT");
+:};
 
 comparator ::= EQUALS {:
     codigoIntermedio.ultimoComparadorLeido = "BNE";

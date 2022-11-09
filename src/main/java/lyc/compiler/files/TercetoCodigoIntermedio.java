@@ -41,6 +41,15 @@ public class TercetoCodigoIntermedio {
         punteros.put(punteroNuevo, punteros.remove(punteroAnterior));
     }
 
+    public void actualizarTerceto(Integer idTerceto, Integer... operandos) {
+        Integer operando2 = operandos.length > 0 ? operandos[0] : null;
+        Integer operando3 = operandos.length > 1 ? operandos[1] : null;
+
+        Terceto terceto = tercetos.get(idTerceto);
+        terceto.operando2 = operando2;
+        terceto.operando3 = operando3;
+    }
+
     public void apilarTerceto(Integer idTerceto) {
         pila.push(idTerceto);
     }
@@ -61,8 +70,15 @@ public class TercetoCodigoIntermedio {
         return tercetos.indexOf(terceto);
     }
 
+    public Integer obtenerCantidadTercetos() {
+        return tercetos.size();
+    }
+
     public void mostrarTercetos() {
-        for (Terceto terceto : this.tercetos)
-            System.out.println(terceto.toString());
+        int idTerceto = 0;
+        for (Terceto terceto : this.tercetos) {
+            System.out.println("[" +String.valueOf(idTerceto) + "] " + terceto.toString());
+            idTerceto++;
+        }
     }
 }
