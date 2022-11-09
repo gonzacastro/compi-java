@@ -10,8 +10,12 @@ import lyc.compiler.model.*;
 class Parser;
 
 parser code{:
-	private TercetoCodigoIntermedio codigoIntermedio = new TercetoCodigoIntermedio();
+    private SymbolTableGenerator tablaDeSimbolos = SymbolTableGenerator.getInstance();
+	private TercetoCodigoIntermedio codigoIntermedio = TercetoCodigoIntermedio.getInstance();
 	private Comparadores comparadores = new Comparadores();
+	private Integer aux;
+	private Integer cont;
+	private String ultimoTipoDeDato;
 :}
 
 // Terminals
@@ -94,15 +98,33 @@ init_block ::= INIT OPEN_CURLY_BRACKET declarations CLOSE_CURLY_BRACKET {: Syste
 
 declarations ::= declarations declaration {: System.out.println("Regla0.2: declaracions"); :};
 
-declarations ::= declaration {: System.out.println("Regla0.3: declaracions"); :};
+declarations ::= declaration {:
+    System.out.println("Regla0.3: declaracions");
+:};
 
-declaration ::= variables COLON data_type {: System.out.println("Regla0.4: declaracion"); :};
+declaration ::= variables COLON data_type {:
+    while(!codigoIntermedio.pilaVariablesVacia()) {
+        String id = codigoIntermedio.desapilarVariable();
+        tablaDeSimbolos.update(id, ultimoTipoDeDato);
+    }
+    System.out.println("Regla0.4: declaracion");
+:};
 
-variables ::= variables COMMA IDENTIFIER:id {: System.out.println("Regla0.5: Variables " + id); :};
+variables ::= variables COMMA IDENTIFIER:id {:
+    codigoIntermedio.apilarVariable(id.toString());
+    System.out.println("Regla0.5: variables , " + id);
+:};
 
-variables ::= IDENTIFIER:id {: System.out.println("Regla0.6: Variable " + id); :};
+variables ::= IDENTIFIER:id {:
+    codigoIntermedio.apilarVariable(id.toString());
+    System.out.println("Regla0.6: Variable " + id);
+:};
 
-data_type ::= INT | STRING | FLOAT {: System.out.println("Regla0.7: tipo de dato"); :};
+data_type ::= INT {: ultimoTipoDeDato = "Entero"; :};
+
+data_type ::= STRING {: ultimoTipoDeDato = "Cadena"; :};
+
+data_type ::= FLOAT {: ultimoTipoDeDato = "Flotante"; :};
 
 
 //*     SENTENCES     *//
@@ -136,9 +158,9 @@ assignment ::= IDENTIFIER:id ASSIG function {:
 :};
 
 //*     ARITMETICA     *//
-expression ::= expression {:
+expression ::= expression  PLUS {:
     codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
-    :} PLUS term {:
+    :} term {:
     codigoIntermedio.insertarTerceto(
         TipoDePuntero.pExpresion,
         "+",
@@ -148,9 +170,9 @@ expression ::= expression {:
     );
 :};
 
-expression ::= expression {:
-  codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
- :} SUB term {:
+expression ::= expression  SUB {:
+    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
+    :} term {:
     codigoIntermedio.insertarTerceto(
         TipoDePuntero.pExpresion,
         "-",
@@ -165,9 +187,9 @@ expression ::= term {:
     System.out.println("Regla7: Expression = Term");
 :};
 
-term ::= term {:
-    codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino));
-    :} MULT factor {:
+term ::= term MULT {:
+   codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino));
+:} factor {:
     codigoIntermedio.insertarTerceto(
         TipoDePuntero.pTermino,
         "*",
@@ -177,9 +199,9 @@ term ::= term {:
     System.out.println("Regla8: Termino *");
 :};
 
-term ::= term {:
+term ::= term  DIV {:
     codigoIntermedio.apilarTerceto(codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pTermino));
-    :} DIV factor {:
+:} factor {:
     codigoIntermedio.insertarTerceto(
         TipoDePuntero.pTermino,
         "/",
@@ -302,20 +324,63 @@ comparator ::= GREATER_EQUALS_THAN {:
 :};
 
 //*     BLOQUE WHILE      *//
-while_block ::= while_sentence sentences_block {: System.out.println("Regla21: While Block"); :};
+while_block ::= while_sentence sentences_block {:
+    aux = codigoIntermedio.desapilarTerceto();
+    codigoIntermedio.actualizarTerceto(aux, codigoIntermedio.obtenerCantidadTercetos()+1);
+    codigoIntermedio.insertarTerceto(null, "BI", aux - 1);
+    System.out.println("Regla21: While Block");
+:};
+
 while_sentence ::= WHILE conditional {: System.out.println("Regla22: While Sentence"); :};
 
 //*     FUNCION READ       *//
-function ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("Regla23: Read Sentence"); :};
+function ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
+    codigoIntermedio.insertarTerceto(null, "READ", codigoIntermedio.insertarTerceto(null, id.toString()));
+    System.out.println("Regla23: Read Sentence");
+:};
 
 //*     FUNCION WRITE       *//
-function ::= WRITE OPEN_BRACKET write_parameter CLOSE_BRACKET {: System.out.println("Regla24: Write Sentence"); :};
-write_parameter ::= IDENTIFIER | INTEGER_CONSTANT | FLOAT_CONSTANT | STRING_CONSTANT {: System.out.println("Regla25: Write Parameter"); :};
+function ::= WRITE OPEN_BRACKET write_parameter CLOSE_BRACKET {:
+    codigoIntermedio.insertarTerceto(null, "WRITE", codigoIntermedio.obtenerCantidadTercetos()-1);
+    System.out.println("Regla24: Write Sentence");
+:};
+write_parameter ::= IDENTIFIER:id {: codigoIntermedio.insertarTerceto(null, id.toString()); :};
+write_parameter ::= INTEGER_CONSTANT:entero {: codigoIntermedio.insertarTerceto(null, entero.toString()); :};
+write_parameter ::= FLOAT_CONSTANT:flotante {: codigoIntermedio.insertarTerceto(null, flotante.toString()); :};
+write_parameter ::= STRING_CONSTANT:cadena {: codigoIntermedio.insertarTerceto(null, cadena.toString()); :};
 
 //*     FUNCION IGUALES      *//
-function ::= IGUALES OPEN_BRACKET expression COMMA OPEN_SQUARE_BRACKET list_expression CLOSE_SQUARE_BRACKET CLOSE_BRACKET {: System.out.println("Regla26: Funcion Iguales"); :};
-list_expression ::= list_expression COMMA expression {: System.out.println("Regla27: List Expression"); :};
-list_expression ::= expression {: System.out.println("Regla28: List Expression"); :};
+function ::= IGUALES OPEN_BRACKET expression {:
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, "@aux"), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, "@cont"), codigoIntermedio.insertarTerceto(null, "0"));
+:}COMMA OPEN_SQUARE_BRACKET list_expression CLOSE_SQUARE_BRACKET CLOSE_BRACKET {:
+
+:};
+list_expression ::= list_expression COMMA expression {:
+    int posActual = codigoIntermedio.insertarTerceto(null, "CMP", codigoIntermedio.insertarTerceto(null, "@aux"), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
+    codigoIntermedio.insertarTerceto(null, "BNE", posActual + 7);
+    int tercetoCont = codigoIntermedio.insertarTerceto(null, "+", codigoIntermedio.insertarTerceto(null, "@cont"), codigoIntermedio.insertarTerceto(null, "1"));
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, "@cont"), tercetoCont);
+    System.out.println("Regla27: List Expression");
+:};
+list_expression ::= expression {:
+    int posActual = codigoIntermedio.insertarTerceto(null, "CMP", codigoIntermedio.insertarTerceto(null, "@aux"), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
+    codigoIntermedio.insertarTerceto(null, "BNE", posActual + 7);
+    int tercetoCont = codigoIntermedio.insertarTerceto(null, "+", codigoIntermedio.insertarTerceto(null, "@cont"), codigoIntermedio.insertarTerceto(null, "1"));
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, "@cont"), tercetoCont);
+    System.out.println("Regla28: List Expression");
+:};
 
 //*     FUNCION REPEAT INLINE      *//
-function ::= REPEAT INTEGER_CONSTANT OPEN_SQUARE_BRACKET sentences CLOSE_SQUARE_BRACKET {: System.out.println("Regla29: Funcion REPEAT"); :};
+function ::= REPEAT INTEGER_CONSTANT:constant {:
+    codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, "@i"), codigoIntermedio.insertarTerceto(null, constant.toString()));
+    codigoIntermedio.insertarTerceto(null, "CMP", codigoIntermedio.insertarTerceto(null, "@i"), codigoIntermedio.insertarTerceto(null, "0"));
+    codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, "BEQ"));
+    int restaI = codigoIntermedio.insertarTerceto(null, "-", codigoIntermedio.insertarTerceto(null, "@i"), codigoIntermedio.insertarTerceto(null, "1"));
+    codigoIntermedio.insertarTerceto(null, "-", codigoIntermedio.insertarTerceto(null, "@i"), restaI);
+:} OPEN_SQUARE_BRACKET sentences CLOSE_SQUARE_BRACKET {:
+    int inicioFor = codigoIntermedio.desapilarTerceto();
+    codigoIntermedio.insertarTerceto(null, "BI", inicioFor-3);
+    codigoIntermedio.actualizarTerceto(inicioFor, codigoIntermedio.obtenerCantidadTercetos());
+    System.out.println("Regla29: Funcion REPEAT");
+:};

@@ -7,8 +7,8 @@ public class Comparadores{
 
     public Comparadores() {
         this.opuestosComparadores = new HashMap<String, String>();
-        this.opuestosComparadores.put("BNE", "BE");
-        this.opuestosComparadores.put("BE", "BNE");
+        this.opuestosComparadores.put("BNE", "BEQ");
+        this.opuestosComparadores.put("BEQ", "BNE");
         this.opuestosComparadores.put("BGE", "BLT");
         this.opuestosComparadores.put("BLT", "BGE");
         this.opuestosComparadores.put("BLE", "BGT");

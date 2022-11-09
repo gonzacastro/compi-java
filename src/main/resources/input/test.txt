@@ -5,17 +5,9 @@ inicio {
 
 }
 
-si(no a == u) {
-    a = "notttt"
-}
+repetir 3 [j=3]
 
-si(a == u o a == 1) {
-    p = u
-} sino {
-    j=1
-    escribir("TEST SINO")
-    si(c == 9 y f == 6) {
-        a = b
-    }
-}
-a=3
+escribir(123)
+leer(asdf)
+
+a=b

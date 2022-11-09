@@ -8,15 +8,25 @@ import java.util.Stack;
 
 public class TercetoCodigoIntermedio {
 
+    private static TercetoCodigoIntermedio instance;
     private ArrayList<Terceto> tercetos;
     private HashMap<TipoDePuntero,Integer> punteros;
     private Stack<Integer> pila;
+    private Stack<String> pilaVariables;
     public String ultimoComparadorLeido = "";
+
+    public static TercetoCodigoIntermedio getInstance() {
+        if (instance == null) {
+            instance = new TercetoCodigoIntermedio();
+        }
+        return instance;
+    }
 
     public TercetoCodigoIntermedio() {
         this.tercetos = new ArrayList<Terceto>();
         this.punteros = new HashMap<TipoDePuntero,Integer>();
         this.pila = new Stack<Integer>();
+        this.pilaVariables = new Stack<String>();
     }
 
     public Integer insertarTerceto(TipoDePuntero puntero, String operando1, Integer... operandos) {
@@ -81,4 +91,11 @@ public class TercetoCodigoIntermedio {
             idTerceto++;
         }
     }
+
+    public void apilarVariable(String id) { pilaVariables.push(id); }
+
+    public String desapilarVariable() { return pilaVariables.pop(); }
+
+    public Boolean pilaVariablesVacia() { return pilaVariables.isEmpty(); }
+
 }

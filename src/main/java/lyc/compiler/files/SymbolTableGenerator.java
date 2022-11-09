@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class SymbolTableGenerator implements FileGenerator{
+public class SymbolTableGenerator implements FileGenerator {
 
     private static SymbolTableGenerator instance;
     private static HashMap<String, Simbolo> tablaDeSimbolos;
@@ -23,6 +23,11 @@ public class SymbolTableGenerator implements FileGenerator{
     public static void add(Simbolo simbolo) {
         if (!tablaDeSimbolos.containsKey(simbolo.getNombre()))
             tablaDeSimbolos.put(simbolo.getNombre(), simbolo);
+    }
+
+    public static void update(String nombre, String tipoDeDato) {
+        Simbolo simbolo = tablaDeSimbolos.get(nombre);
+        simbolo.setTipoDato(tipoDeDato);
     }
 
     public static HashMap<String, Simbolo> getTablaDeSimbolos() {
