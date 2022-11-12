@@ -143,16 +143,20 @@ sentences_block ::= OPEN_CURLY_BRACKET sentences CLOSE_CURLY_BRACKET {: System.o
 
 //*     ASIGNACIONES     *//
 assignment ::= IDENTIFIER:id ASSIG expression {:
+    tablaDeSimbolos.verificarTipo(id.toString());
     codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, id.toString()), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pExpresion));
     System.out.println("Regla4: Assignment " + id  + " = expresion");
 :};
 
 assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {:
+    tablaDeSimbolos.verificarTipo(id.toString());
+   // tablaDeSimbolos.update("_" + str.toString(), "Cadena");
     codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, id.toString()), codigoIntermedio.insertarTerceto(null, str.toString()));
     System.out.println("Regla4.1: Assignment " + id  + " = " + str);
 :};
 
 assignment ::= IDENTIFIER:id ASSIG function {:
+    tablaDeSimbolos.verificarTipo(id.toString());
     codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, id.toString()), codigoIntermedio.obtenerTercetoDePuntero(TipoDePuntero.pFuncion));
     System.out.println("Regla4.2: Assignment " + id  + " = function");
 :};
@@ -217,16 +221,19 @@ term ::= factor {:
 :};
 
 factor ::= IDENTIFIER:id  {:
+    tablaDeSimbolos.verificarTipo(id.toString());
     codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, id.toString());
     System.out.println("Regla11: Factor Id: " + id);
 :};
 
 factor ::= INTEGER_CONSTANT:constant {:
+   // tablaDeSimbolos.update("_" + constant, "Entero");
     codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, constant.toString());
     System.out.println("Regla12: Factor Constant: " + constant );
 :};
 
 factor ::= FLOAT_CONSTANT:flotante {:
+   // tablaDeSimbolos.update("_" + flotante, "Flotante");
     codigoIntermedio.insertarTerceto(TipoDePuntero.pFactor, flotante.toString());
     System.out.println("Regla13: float Factor Float: " + flotante );
 :};
@@ -335,6 +342,7 @@ while_sentence ::= WHILE conditional {: System.out.println("Regla22: While Sente
 
 //*     FUNCION READ       *//
 function ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
+    tablaDeSimbolos.verificarTipo(id.toString());
     codigoIntermedio.insertarTerceto(null, "READ", codigoIntermedio.insertarTerceto(null, id.toString()));
     System.out.println("Regla23: Read Sentence");
 :};
@@ -344,10 +352,13 @@ function ::= WRITE OPEN_BRACKET write_parameter CLOSE_BRACKET {:
     codigoIntermedio.insertarTerceto(null, "WRITE", codigoIntermedio.obtenerCantidadTercetos()-1);
     System.out.println("Regla24: Write Sentence");
 :};
-write_parameter ::= IDENTIFIER:id {: codigoIntermedio.insertarTerceto(null, id.toString()); :};
-write_parameter ::= INTEGER_CONSTANT:entero {: codigoIntermedio.insertarTerceto(null, entero.toString()); :};
-write_parameter ::= FLOAT_CONSTANT:flotante {: codigoIntermedio.insertarTerceto(null, flotante.toString()); :};
-write_parameter ::= STRING_CONSTANT:cadena {: codigoIntermedio.insertarTerceto(null, cadena.toString()); :};
+write_parameter ::= IDENTIFIER:id {: tablaDeSimbolos.verificarTipo(id.toString()); codigoIntermedio.insertarTerceto(null, id.toString()); :};
+write_parameter ::= INTEGER_CONSTANT:entero {: //tablaDeSimbolos.update("_" + entero, "Entero"); 
+codigoIntermedio.insertarTerceto(null, entero.toString()); :};
+write_parameter ::= FLOAT_CONSTANT:flotante {: //tablaDeSimbolos.update("_" + flotante, "Flotante"); 
+codigoIntermedio.insertarTerceto(null, flotante.toString()); :};
+write_parameter ::= STRING_CONSTANT:cadena {:// tablaDeSimbolos.update("_" + cadena.toString(), "Cadena"); 
+codigoIntermedio.insertarTerceto(null, cadena.toString()); :};
 
 //*     FUNCION IGUALES      *//
 function ::= IGUALES OPEN_BRACKET expression {:
@@ -373,6 +384,7 @@ list_expression ::= expression {:
 
 //*     FUNCION REPEAT INLINE      *//
 function ::= REPEAT INTEGER_CONSTANT:constant {:
+   // tablaDeSimbolos.update("_" + constant, "Entero");
     codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, "@i"), codigoIntermedio.insertarTerceto(null, constant.toString()));
     codigoIntermedio.insertarTerceto(null, "CMP", codigoIntermedio.insertarTerceto(null, "@i"), codigoIntermedio.insertarTerceto(null, "0"));
     codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, "BEQ"));

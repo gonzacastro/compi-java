@@ -1,5 +1,7 @@
 package lyc.compiler.files;
-
+import lyc.compiler.model.CompilerException;
+import lyc.compiler.model.InvalidVariableException;
+import lyc.compiler.model.DuplicateVarException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,8 +27,12 @@ public class SymbolTableGenerator implements FileGenerator {
             tablaDeSimbolos.put(simbolo.getNombre(), simbolo);
     }
 
-    public static void update(String nombre, String tipoDeDato) {
+    public static void update(String nombre, String tipoDeDato) throws DuplicateVarException{
         Simbolo simbolo = tablaDeSimbolos.get(nombre);
+
+        if(simbolo.getTipoDato() != null)
+            throw new DuplicateVarException("variable " + "\"" + nombre + "\"" + " duplicada");
+
         simbolo.setTipoDato(tipoDeDato);
     }
 
@@ -54,5 +60,12 @@ public class SymbolTableGenerator implements FileGenerator {
                 }
             }
         );
+    }
+
+    public static void verificarTipo(String nombre) throws InvalidVariableException{
+        Simbolo simbolo = tablaDeSimbolos.get(nombre);
+
+        if(simbolo.getTipoDato() == null)
+            throw new InvalidVariableException("Variable " + "\"" + nombre + "\"" + " sin declarar");
     }
 }

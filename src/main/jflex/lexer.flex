@@ -204,7 +204,7 @@ BlockComment = \/\*{InputCharacter}*\*\/
                                             String constString = new String(yytext());
                                             
                                             if (constString.length()-2 <= STRING_RANGE) {
-                                              Simbolo simbolo = new Simbolo("_" + constString, "Cadena", constString, constString.length());
+                                              Simbolo simbolo = new Simbolo("_" + constString, "Cadena", constString, constString.length()-2);
                                               agregarSimbolo(simbolo);
                                               return symbol(ParserSym.STRING_CONSTANT, yytext());
                                             } else

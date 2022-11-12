@@ -2,12 +2,24 @@ inicio {
     a1, b1 : Flotante
     variable1 : Entero
     p1, p2, p3 : Cadena
+    a, b, c, d, e, f, g, T, P, w, j,u, p : Entero
 
 }
 
+mientras(a == b y c == d){
+P=T
+}
+/* ajd fasdf */
+
+
+
+	
 repetir 3 [j=3]
 
+
+
+a=3
 escribir(123)
-leer(asdf)
+
 
 a=b
