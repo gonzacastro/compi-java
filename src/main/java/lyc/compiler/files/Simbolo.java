@@ -7,6 +7,7 @@ public class Simbolo {
     private String nombre;
     private String tipoDato;
     private String valor;
+
     private int longitud;
 
     public Simbolo(String nombre, String tipoDato, String valor, int longitud) {
@@ -30,6 +31,22 @@ public class Simbolo {
 
     public int getLongitud() {
         return longitud;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setTipoDato(String tipoDato) {
+        this.tipoDato = tipoDato;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public void setLongitud(int longitud) {
+        this.longitud = longitud;
     }
 
     private String toStringObject(Object o) {
