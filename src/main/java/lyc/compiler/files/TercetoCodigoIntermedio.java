@@ -84,12 +84,16 @@ public class TercetoCodigoIntermedio {
         return tercetos.size();
     }
 
-    public void mostrarTercetos() {
+    public String mostrarTercetos() {
         int idTerceto = 0;
+        String tercetos = "";
+        
         for (Terceto terceto : this.tercetos) {
             System.out.println("[" +String.valueOf(idTerceto) + "] " + terceto.toString());
+            tercetos = tercetos + "[" +String.valueOf(idTerceto) + "] " + terceto.toString() + "\n";
             idTerceto++;
         }
+        return tercetos;
     }
 
     public void apilarVariable(String id) { pilaVariables.push(id); }

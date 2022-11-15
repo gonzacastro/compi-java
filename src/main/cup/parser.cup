@@ -90,7 +90,7 @@ non terminal list_expression;
 start with program;
 
 //*     MAIN      *//
-program ::= init_block sentences {: System.out.println("Regla0: programa"); codigoIntermedio.mostrarTercetos(); :};
+program ::= init_block sentences {: System.out.println("Regla0: programa"); codigoIntermedio.mostrarTercetos(); IntermediateCodeGenerator.getInstance().setIntermediateCode(codigoIntermedio); :};
 
 
 //*     INIT BLOCK      *//
