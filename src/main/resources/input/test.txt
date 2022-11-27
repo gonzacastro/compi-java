@@ -1,25 +1,34 @@
 inicio {
     a1, b1 : Flotante
-    variable1 : Entero
+    variable1, c1 : Entero
     p1, p2, p3 : Cadena
     a, b, c, d, e, f, g, T, P, w, j,u, p : Entero
 
 }
 
-mientras(a == b y c == d){
-P=T
+si(a == b y c == d){
+        c1=20
+}
+
+mientras(a == b){
+    P=T
+    si(a == b o c == d){
+        c1=2
+    } sino {
+        P=T
+    }
 }
 /* ajd fasdf */
 
 
 
-	
+
 repetir 3 [j=3]
 
 
 
 a=3
-escribir(123)
+escribir("holaaa")
 
 
 a=b
