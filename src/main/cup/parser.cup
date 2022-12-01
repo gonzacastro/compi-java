@@ -16,6 +16,10 @@ parser code{:
 	private Integer aux;
 	private Integer cont;
 	private String ultimoTipoDeDato;
+	private int cantidadSaltos = 0;
+	private String prefixSalto = "%salto%";
+	private String salto;
+	private Integer tercetoSalto;
 :}
 
 // Terminals
@@ -245,14 +249,29 @@ factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
 
 //*     BLOQUE IF      *//
 if_block ::= if_sentence sentences_block {:
-    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos());
+    salto = prefixSalto + "if" + String.valueOf(cantidadSaltos++);
+    Integer tercetoAActualizar = codigoIntermedio.desapilarTerceto();
+    Integer tercetoSalto = codigoIntermedio.insertarTerceto(null, salto);
+    if (codigoIntermedio.obtenerTerceto(tercetoAActualizar).operando2 != null) {
+        codigoIntermedio.actualizarTerceto(codigoIntermedio.obtenerTerceto(tercetoAActualizar).operando2, tercetoSalto);
+    }
+    codigoIntermedio.actualizarTerceto(tercetoAActualizar, tercetoSalto);
 :};
 
 if_else_block ::= if_sentence sentences_block {:
-    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos()+1);
+    salto = prefixSalto + "if" + String.valueOf(cantidadSaltos++);
+    Integer tercetoAActualizar = codigoIntermedio.desapilarTerceto();
     codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, "BI"));
+    Integer tercetoSalto = codigoIntermedio.insertarTerceto(null, salto);
+    if (codigoIntermedio.obtenerTerceto(tercetoAActualizar).operando2 != null) {
+        codigoIntermedio.actualizarTerceto(codigoIntermedio.obtenerTerceto(tercetoAActualizar).operando2, tercetoSalto);
+    }
+    codigoIntermedio.actualizarTerceto(tercetoAActualizar, tercetoSalto);
 :} ELSE sentences_block {:
-    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos());
+    salto = prefixSalto + "else" + String.valueOf(cantidadSaltos++);
+    Integer tercetoAActualizar = codigoIntermedio.desapilarTerceto();
+    Integer tercetoSalto = codigoIntermedio.insertarTerceto(null, salto);
+    codigoIntermedio.actualizarTerceto(tercetoAActualizar, tercetoSalto);
     System.out.println("Regla14: If Else Block");
 :};
 
@@ -267,14 +286,9 @@ conditions ::= condition {:
 :};
 
 conditions ::= condition {:
-    codigoIntermedio.apilarTerceto(
-        codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null)
-    );
+    codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null));
 :} AND condition {:
-    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos()+1);
-    codigoIntermedio.apilarTerceto(
-        codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null)
-    );
+    codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, codigoIntermedio.desapilarTerceto(), null));
     System.out.println("Regla16: Condicion AND Condicion");
 :};
 
@@ -282,11 +296,11 @@ conditions ::= condition {:
     codigoIntermedio.ultimoComparadorLeido = comparadores.obtenerOpuesto(codigoIntermedio.ultimoComparadorLeido);
     codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido));
 :} OR condition {:
-    codigoIntermedio.actualizarTerceto(codigoIntermedio.desapilarTerceto(), codigoIntermedio.obtenerCantidadTercetos()+1);
-    codigoIntermedio.apilarTerceto(
-        codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null)
-    );
-
+    salto = prefixSalto + "orV" + String.valueOf(cantidadSaltos++);
+    Integer tercetoAActualizar = codigoIntermedio.desapilarTerceto();
+    codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, codigoIntermedio.ultimoComparadorLeido, null, null));
+    tercetoSalto = codigoIntermedio.insertarTerceto(null, salto);
+    codigoIntermedio.actualizarTerceto(tercetoAActualizar, tercetoSalto);
 :};
 
 condition ::= factor {:
@@ -333,12 +347,17 @@ comparator ::= GREATER_EQUALS_THAN {:
 //*     BLOQUE WHILE      *//
 while_block ::= while_sentence sentences_block {:
     aux = codigoIntermedio.desapilarTerceto();
+    tercetoSalto = codigoIntermedio.desapilarTerceto();
     codigoIntermedio.actualizarTerceto(aux, codigoIntermedio.obtenerCantidadTercetos()+1);
-    codigoIntermedio.insertarTerceto(null, "BI", aux - 1);
+    codigoIntermedio.insertarTerceto(null, "BI", tercetoSalto);
     System.out.println("Regla21: While Block");
 :};
 
-while_sentence ::= WHILE conditional {: System.out.println("Regla22: While Sentence"); :};
+while_sentence ::= WHILE {:
+    salto = prefixSalto + "while" + String.valueOf(cantidadSaltos++);
+    tercetoSalto = codigoIntermedio.insertarTerceto(null, salto);
+    codigoIntermedio.apilarTerceto(tercetoSalto);
+:} conditional {: System.out.println("Regla22: While Sentence"); :};
 
 //*     FUNCION READ       *//
 function ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
@@ -385,6 +404,9 @@ list_expression ::= expression {:
 //*     FUNCION REPEAT INLINE      *//
 function ::= REPEAT INTEGER_CONSTANT:constant {:
    // tablaDeSimbolos.update("_" + constant, "Entero");
+    salto = prefixSalto + "inicioFor" + String.valueOf(cantidadSaltos++);
+    tercetoSalto = codigoIntermedio.insertarTerceto(null, salto);
+    codigoIntermedio.apilarTerceto(tercetoSalto);
     codigoIntermedio.insertarTerceto(null, "=", codigoIntermedio.insertarTerceto(null, "@i"), codigoIntermedio.insertarTerceto(null, constant.toString()));
     codigoIntermedio.insertarTerceto(null, "CMP", codigoIntermedio.insertarTerceto(null, "@i"), codigoIntermedio.insertarTerceto(null, "0"));
     codigoIntermedio.apilarTerceto(codigoIntermedio.insertarTerceto(null, "BEQ"));
@@ -392,7 +414,10 @@ function ::= REPEAT INTEGER_CONSTANT:constant {:
     codigoIntermedio.insertarTerceto(null, "-", codigoIntermedio.insertarTerceto(null, "@i"), restaI);
 :} OPEN_SQUARE_BRACKET sentences CLOSE_SQUARE_BRACKET {:
     int inicioFor = codigoIntermedio.desapilarTerceto();
-    codigoIntermedio.insertarTerceto(null, "BI", inicioFor-3);
-    codigoIntermedio.actualizarTerceto(inicioFor, codigoIntermedio.obtenerCantidadTercetos());
+    tercetoSalto = codigoIntermedio.desapilarTerceto();
+    codigoIntermedio.insertarTerceto(null, "BI", tercetoSalto);
+    salto = prefixSalto + "salidaFor" + String.valueOf(cantidadSaltos++);
+    tercetoSalto = codigoIntermedio.insertarTerceto(null, salto);
+    codigoIntermedio.actualizarTerceto(inicioFor, tercetoSalto);
     System.out.println("Regla29: Funcion REPEAT");
 :};

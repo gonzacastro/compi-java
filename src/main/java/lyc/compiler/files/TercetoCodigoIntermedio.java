@@ -55,7 +55,7 @@ public class TercetoCodigoIntermedio {
         Integer operando2 = operandos.length > 0 ? operandos[0] : null;
         Integer operando3 = operandos.length > 1 ? operandos[1] : null;
 
-        Terceto terceto = tercetos.get(idTerceto);
+        Terceto terceto = obtenerTerceto(idTerceto);
         terceto.operando2 = operando2;
         terceto.operando3 = operando3;
     }
@@ -72,6 +72,9 @@ public class TercetoCodigoIntermedio {
         return tercetos;
     }
 
+    public Terceto obtenerTerceto(Integer idTerceto) {
+        return tercetos.get(idTerceto);
+    }
     public Integer obtenerTercetoDePuntero(TipoDePuntero puntero) {
         return punteros.get(puntero);
     }
@@ -101,5 +104,4 @@ public class TercetoCodigoIntermedio {
     public String desapilarVariable() { return pilaVariables.pop(); }
 
     public Boolean pilaVariablesVacia() { return pilaVariables.isEmpty(); }
-
 }
